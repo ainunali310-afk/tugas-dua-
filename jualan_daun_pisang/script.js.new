@@ -1,0 +1,417 @@
+// API Configuration
+const API_BASE_URL = 'http://localhost/jualan_daun_pisang/api.php';
+
+// State Management
+const state = {
+    cart: [],
+    products: {
+        besar: {
+            id: 'besar',
+            name: 'Daun Pisang Besar',
+            price: 1000,
+            description: 'Ukuran: 40-50 cm, cocok untuk nasi gudeg, pepes ikan',
+            specs: {
+                ukuran: '40-50 cm',
+                asal: 'Semarang, Jawa Tengah',
+                caraSimpan: 'Simpan di tempat sejuk dan kering',
+                minPembelian: '10 lembar'
+            },
+            stock: 100,
+            wholesale: {
+                min: 50,
+                discount: '10%',
+                price: 900
+            }
+        },
+        sedang: {
+            id: 'sedang',
+            name: 'Daun Pisang Sedang',
+            price: 700,
+            description: 'Ukuran: 30-40 cm, cocok untuk lontong, ketupat',
+            specs: {
+                ukuran: '30-40 cm',
+                asal: 'Semarang, Jawa Tengah',
+                caraSimpan: 'Simpan di tempat sejuk dan kering',
+                minPembelian: '10 lembar'
+            },
+            stock: 150,
+            wholesale: {
+                min: 50,
+                discount: '10%',
+                price: 630
+            }
+        },
+        kecil: {
+            id: 'kecil',
+            name: 'Daun Pisang Kecil',
+            price: 500,
+            description: 'Ukuran: 20-30 cm, cocok untuk tempe, tahu bacem',
+            specs: {
+                ukuran: '20-30 cm',
+                asal: 'Semarang, Jawa Tengah',
+                caraSimpan: 'Simpan di tempat sejuk dan kering',
+                minPembelian: '10 lembar'
+            },
+            stock: 200,
+            wholesale: {
+                min: 50,
+                discount: '10%',
+                price: 450
+            }
+        }
+    }
+};
+
+// Utility Functions
+function formatPrice(price) {
+    return new Intl.NumberFormat('id-ID').format(price);
+}
+
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+function getProduct(productId) {
+    return state.products[productId];
+}
+
+// Cart Functions
+function updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (!cartCount) return;
+    
+    const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    saveCartToStorage();
+}
+
+function addToCart(productId) {
+    const input = document.getElementById(`qty-${productId}`);
+    if (!input) return;
+
+    const quantity = parseInt(input.value) || 1;
+    const product = getProduct(productId);
+    if (!product) return;
+
+    if (quantity > product.stock) {
+        showNotification('Stok tidak mencukupi!', 'error');
+        return;
+    }
+
+    const existingItem = state.cart.find(item => item.id === productId);
+    if (existingItem) {
+        if (existingItem.quantity + quantity > product.stock) {
+            showNotification('Stok tidak mencukupi!', 'error');
+            return;
+        }
+        existingItem.quantity += quantity;
+    } else {
+        state.cart.push({
+            id: productId,
+            name: product.name,
+            price: product.price,
+            quantity: quantity
+        });
+    }
+
+    updateCartCount();
+    showNotification('Produk ditambahkan ke keranjang!');
+    input.value = 1;
+    updateSubtotal(productId);
+}
+
+function removeFromCart(productId) {
+    state.cart = state.cart.filter(item => item.id !== productId);
+    updateCartCount();
+    showCart();
+}
+
+// Product Functions
+function changeQuantity(productId, change) {
+    const input = document.getElementById(`qty-${productId}`);
+    if (!input) return;
+
+    const product = getProduct(productId);
+    if (!product) return;
+
+    const currentValue = parseInt(input.value) || 1;
+    const newValue = Math.max(1, Math.min(product.stock, currentValue + change));
+    input.value = newValue;
+    updateSubtotal(productId);
+}
+
+function updateSubtotal(productId) {
+    const input = document.getElementById(`qty-${productId}`);
+    const subtotalElement = document.getElementById(`subtotal-${productId}`);
+    if (!input || !subtotalElement) return;
+
+    const product = getProduct(productId);
+    if (!product) return;
+
+    const quantity = parseInt(input.value) || 1;
+    const price = quantity >= product.wholesale.min ? product.wholesale.price : product.price;
+    const subtotal = quantity * price;
+    subtotalElement.textContent = formatPrice(subtotal);
+}
+
+// Modal Functions
+function showCart() {
+    const modal = document.getElementById('cartModal');
+    const content = document.getElementById('cartContent');
+    const totalElement = document.getElementById('cartTotal');
+    if (!modal || !content || !totalElement) return;
+
+    if (state.cart.length === 0) {
+        content.innerHTML = '<div class="empty-cart">Keranjang belanja kosong</div>';
+        totalElement.textContent = '0';
+        modal.style.display = 'block';
+        return;
+    }
+
+    let html = '<div class="cart-items">';
+    const total = state.cart.reduce((sum, item) => {
+        const product = getProduct(item.id);
+        const price = item.quantity >= product.wholesale.min ? product.wholesale.price : item.price;
+        const itemTotal = price * item.quantity;
+        html += `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>Rp ${formatPrice(price)} x ${item.quantity}</p>
+                    ${item.quantity >= product.wholesale.min ? 
+                        `<small class="discount-tag">Harga Grosir</small>` : ''}
+                </div>
+                <div class="cart-item-total">
+                    <p>Rp ${formatPrice(itemTotal)}</p>
+                    <button onclick="removeFromCart('${item.id}')" class="btn-remove">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        return sum + itemTotal;
+    }, 0);
+
+    html += '</div>';
+    content.innerHTML = html;
+    totalElement.textContent = formatPrice(total);
+    modal.style.display = 'block';
+}
+
+function showProductDetail(productId) {
+    const modal = document.getElementById('productModal');
+    const content = document.getElementById('productDetailContent');
+    if (!modal || !content) return;
+
+    const product = getProduct(productId);
+    if (!product) return;
+
+    content.innerHTML = `
+        <h2>${product.name}</h2>
+        <div class="product-detail-content">
+            <img src="aset/${productId}.jpg" alt="${product.name}" class="product-image">
+            <div class="product-detail-info">
+                <p class="price">Rp ${formatPrice(product.price)}<span>/lembar</span></p>
+                <p class="stock-info ${product.stock < 20 ? 'low-stock' : ''}">
+                    Stok tersedia: ${product.stock} lembar
+                </p>
+                <p class="description">${product.description}</p>
+                <div class="specs-info">
+                    <h3>Spesifikasi:</h3>
+                    <ul>
+                        <li>Ukuran: ${product.specs.ukuran}</li>
+                        <li>Asal: ${product.specs.asal}</li>
+                        <li>Cara Simpan: ${product.specs.caraSimpan}</li>
+                        <li>Min. Pembelian: ${product.specs.minPembelian}</li>
+                    </ul>
+                </div>
+                <div class="wholesale-info">
+                    <h3>Harga Grosir:</h3>
+                    <p>Pembelian ${product.wholesale.min}+ lembar: Diskon ${product.wholesale.discount}</p>
+                    <p>Rp ${formatPrice(product.wholesale.price)}/lembar</p>
+                </div>
+                <div class="quantity-controls">
+                    <button onclick="changeQuantity('${productId}', -1)" class="btn-qty">-</button>
+                    <input type="number" id="qty-${productId}" value="1" min="1" max="${product.stock}">
+                    <button onclick="changeQuantity('${productId}', 1)" class="btn-qty">+</button>
+                </div>
+                <button onclick="addToCart('${productId}')" class="btn-add-cart">
+                    Tambah ke Keranjang
+                </button>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = 'block';
+}
+
+// Checkout Functions
+function showCheckout() {
+    if (state.cart.length === 0) {
+        showNotification('Keranjang belanja kosong!', 'error');
+        return;
+    }
+
+    const modal = document.getElementById('checkoutModal');
+    const summary = document.getElementById('orderSummary');
+    if (!modal || !summary) return;
+
+    let html = '<div class="order-items">';
+    const total = state.cart.reduce((sum, item) => {
+        const product = getProduct(item.id);
+        const price = item.quantity >= product.wholesale.min ? product.wholesale.price : item.price;
+        const itemTotal = price * item.quantity;
+        html += `
+            <div class="order-item">
+                <span>${item.name} x ${item.quantity}</span>
+                <span>Rp ${formatPrice(itemTotal)}</span>
+            </div>
+        `;
+        return sum + itemTotal;
+    }, 0);
+
+    html += `
+        <div class="order-total">
+            <strong>Total Pembayaran:</strong>
+            <strong>Rp ${formatPrice(total)}</strong>
+        </div>
+    </div>`;
+
+    summary.innerHTML = html;
+    modal.style.display = 'block';
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Load cart from storage
+    loadCartFromStorage();
+
+    // Close modal buttons
+    document.querySelectorAll('.close').forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            if (modal) modal.style.display = 'none';
+        });
+    });
+
+    // Click outside modal to close
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            showNotification(`Terima kasih ${name}! Pesan Anda telah dikirim.`);
+            contactForm.reset();
+        });
+    }
+
+    // Checkout form
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const orderData = {
+                customer: {
+                    name: document.getElementById('buyerName').value,
+                    phone: document.getElementById('buyerPhone').value,
+                    address: document.getElementById('buyerAddress').value
+                },
+                payment: document.querySelector('input[name="payment"]:checked')?.value,
+                shipping: document.querySelector('input[name="shipping"]:checked')?.value,
+                items: state.cart,
+                total: state.cart.reduce((sum, item) => {
+                    const product = getProduct(item.id);
+                    const price = item.quantity >= product.wholesale.min ? product.wholesale.price : item.price;
+                    return sum + (price * item.quantity);
+                }, 0)
+            };
+
+            if (!orderData.payment || !orderData.shipping) {
+                showNotification('Pilih metode pembayaran dan pengiriman!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (!response.ok) throw new Error('Gagal memproses pesanan');
+
+                state.cart = [];
+                updateCartCount();
+                modal.style.display = 'none';
+                
+                const whatsappMessage = createWhatsAppMessage(orderData);
+                const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
+                
+                showNotification(`
+                    Pesanan berhasil! 
+                    <a href="${whatsappUrl}" target="_blank" class="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i> Lanjutkan ke WhatsApp
+                    </a>
+                `);
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
+            }
+        });
+    }
+
+    // Initialize quantity displays
+    Object.keys(state.products).forEach(productId => {
+        updateSubtotal(productId);
+    });
+});
+
+// Helper Functions
+function createWhatsAppMessage(order) {
+    let message = '*PESANAN DAUN PISANG SEGAR*\n\n';
+    message += '*Data Pembeli:*\n';
+    message += `Nama: ${order.customer.name}\n`;
+    message += `No. HP: ${order.customer.phone}\n`;
+    message += `Alamat: ${order.customer.address}\n\n`;
+    
+    message += '*Detail Pesanan:*\n';
+    order.items.forEach(item => {
+        const product = getProduct(item.id);
+        const price = item.quantity >= product.wholesale.min ? product.wholesale.price : item.price;
+        message += `• ${item.name}: ${item.quantity} lembar x Rp ${formatPrice(price)} = Rp ${formatPrice(price * item.quantity)}\n`;
+    });
+    
+    message += `\n*Total: Rp ${formatPrice(order.total)}*\n\n`;
+    message += `*Metode Pembayaran:* ${order.payment}\n`;
+    message += `*Metode Pengiriman:* ${order.shipping}\n\n`;
+    message += 'Mohon konfirmasi pesanan ini. Tim kami akan segera memproses dan mengantar pesanan Anda. Terima kasih! 🍃';
+    
+    return message;
+}
+
+// Storage Functions
+function saveCartToStorage() {
+    localStorage.setItem('daunPisangCart', JSON.stringify(state.cart));
+}
+
+function loadCartFromStorage() {
+    const savedCart = localStorage.getItem('daunPisangCart');
+    if (savedCart) {
+        state.cart = JSON.parse(savedCart);
+        updateCartCount();
+    }
+}

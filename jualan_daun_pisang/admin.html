@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Daun Pisang Segar</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin-script.js" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🍃 Admin Panel</h2>
+            <p>Daun Pisang Segar</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#dashboard" class="nav-link active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#orders" class="nav-link" data-section="orders"><i class="fas fa-shopping-cart"></i> Pesanan</a></li>
+                <li><a href="#products" class="nav-link" data-section="products"><i class="fas fa-leaf"></i> Produk</a></li>
+                <li><a href="#customers" class="nav-link" data-section="customers"><i class="fas fa-users"></i> Pelanggan</a></li>
+                <li><a href="#inventory" class="nav-link" data-section="inventory"><i class="fas fa-warehouse"></i> Stok</a></li>
+                <li><a href="#delivery" class="nav-link" data-section="delivery"><i class="fas fa-truck"></i> Pengiriman</a></li>
+                <li><a href="#reports" class="nav-link" data-section="reports"><i class="fas fa-chart-bar"></i> Laporan</a></li>
+                <li><a href="#settings" class="nav-link" data-section="settings"><i class="fas fa-cog"></i> Pengaturan</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> Kembali ke Website
+            </a>
+            <a href="#" class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        <style>
+            .sidebar-footer {
+                padding: 20px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .btn-back, .btn-logout {
+                display: block;
+                padding: 10px 15px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                text-decoration: none;
+                color: white;
+                transition: background-color 0.3s;
+            }
+            .btn-back {
+                background-color: #4CAF50;
+            }
+            .btn-back:hover {
+                background-color: #45a049;
+            }
+            .btn-logout {
+                background-color: #dc3545;
+            }
+            .btn-logout:hover {
+                background-color: #c82333;
+            }
+            .sidebar-footer i {
+                margin-right: 8px;
+            }
+        </style>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">0</span>
+                    </button>
+                    <div class="notification-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifikasi</h3>
+                            <button class="mark-all-read">Tandai Sudah Dibaca</button>
+                        </div>
+                        <div class="notification-list">
+                            <!-- Notifications will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-profile">
+                    <span class="admin-name">Admin</span>
+                    <img src="aset/admin-avatar.png" alt="Admin" class="admin-avatar">
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Section Content -->
+        <div class="section-content">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Generic Modal -->
+        <div id="genericModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalContent"></div>
+            </div>
+        </div>
+                <div class="admin-profile">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Admin">
+                    <span>Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pesanan Hari Ini</h3>
+                        <p class="stat-number">24</p>
+                        <span class="stat-change positive">+12% dari kemarin</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pendapatan Hari Ini</h3>
+                        <p class="stat-number">Rp 2.450.000</p>
+                        <span class="stat-change positive">+8% dari kemarin</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Stok Tersedia</h3>
+                        <p class="stat-number">1.250 lembar</p>
+                        <span class="stat-change negative">-5% dari kemarin</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pengiriman Aktif</h3>
+                        <p class="stat-number">8</p>
+                        <span class="stat-change neutral">Sama dengan kemarin</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <h3>Penjualan Mingguan</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
+                <div class="recent-orders">
+                    <h3>Pesanan Terbaru</h3>
+                    <div class="order-list">
+                        <div class="order-item">
+                            <div class="order-info">
+                                <h4>Sari Wulandari</h4>
+                                <p>50 lembar Daun Pisang Besar</p>
+                                <span class="order-time">10 menit yang lalu</span>
+                            </div>
+                            <div class="order-status">
+                                <span class="status pending">Menunggu</span>
+                                <span class="order-total">Rp 50.000</span>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="order-info">
+                                <h4>Budi Santoso</h4>
+                                <p>30 lembar Daun Pisang Sedang</p>
+                                <span class="order-time">25 menit yang lalu</span>
+                            </div>
+                            <div class="order-status">
+                                <span class="status processing">Diproses</span>
+                                <span class="order-total">Rp 21.000</span>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="order-info">
+                                <h4>Maya Indira</h4>
+                                <p>100 lembar Daun Pisang Kecil</p>
+                                <span class="order-time">1 jam yang lalu</span>
+                            </div>
+                            <div class="order-status">
+                                <span class="status delivered">Terkirim</span>
+                                <span class="order-total">Rp 50.000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders-section" class="content-section">
+            <div class="section-header">
+                <h2>Manajemen Pesanan</h2>
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="exportOrders()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <select class="filter-select" id="orderFilter">
+                        <option value="all">Semua Status</option>
+                        <option value="pending">Menunggu</option>
+                        <option value="processing">Diproses</option>
+                        <option value="shipped">Dikirim</option>
+                        <option value="delivered">Terkirim</option>
+                        <option value="cancelled">Dibatalkan</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Produk</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Orders will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products-section" class="content-section">
+            <div class="section-header">
+                <h2>Manajemen Produk</h2>
+                <button class="btn btn-primary" onclick="showAddProductModal()">
+                    <i class="fas fa-plus"></i> Tambah Produk
+                </button>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card-admin">
+                    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Daun Pisang Besar">
+                    <div class="product-info-admin">
+                        <h3>Daun Pisang Besar</h3>
+                        <p class="product-price">Rp 1.000/lembar</p>
+                        <p class="product-stock">Stok: 450 lembar</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="editProduct('besar')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduct('besar')">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card-admin">
+                    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Daun Pisang Sedang">
+                    <div class="product-info-admin">
+                        <h3>Daun Pisang Sedang</h3>
+                        <p class="product-price">Rp 700/lembar</p>
+                        <p class="product-stock">Stok: 320 lembar</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="editProduct('sedang')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduct('sedang')">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card-admin">
+                    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Daun Pisang Kecil">
+                    <div class="product-info-admin">
+                        <h3>Daun Pisang Kecil</h3>
+                        <p class="product-price">Rp 500/lembar</p>
+                        <p class="product-stock">Stok: 480 lembar</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="editProduct('kecil')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduct('kecil')">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customers Section -->
+        <section id="customers-section" class="content-section">
+            <div class="section-header">
+                <h2>Manajemen Pelanggan</h2>
+                <div class="search-box">
+                    <input type="text" placeholder="Cari pelanggan..." id="customerSearch">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Telepon</th>
+                            <th>Total Pesanan</th>
+                            <th>Total Pembelian</th>
+                            <th>Bergabung</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody">
+                        <!-- Customers will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Inventory Section -->
+        <section id="inventory-section" class="content-section">
+            <div class="section-header">
+                <h2>Manajemen Stok</h2>
+                <button class="btn btn-primary" onclick="showAddStockModal()">
+                    <i class="fas fa-plus"></i> Tambah Stok
+                </button>
+            </div>
+            
+            <div class="inventory-grid">
+                <div class="inventory-card">
+                    <div class="inventory-header">
+                        <h3>Daun Pisang Besar</h3>
+                        <span class="stock-status low">Stok Rendah</span>
+                    </div>
+                    <div class="inventory-details">
+                        <div class="stock-info">
+                            <span class="stock-current">450</span>
+                            <span class="stock-unit">lembar</span>
+                        </div>
+                        <div class="stock-actions">
+                            <button class="btn btn-sm btn-primary" onclick="addStock('besar')">
+                                <i class="fas fa-plus"></i> Tambah
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="adjustStock('besar')">
+                                <i class="fas fa-edit"></i> Sesuaikan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="inventory-card">
+                    <div class="inventory-header">
+                        <h3>Daun Pisang Sedang</h3>
+                        <span class="stock-status normal">Stok Normal</span>
+                    </div>
+                    <div class="inventory-details">
+                        <div class="stock-info">
+                            <span class="stock-current">320</span>
+                            <span class="stock-unit">lembar</span>
+                        </div>
+                        <div class="stock-actions">
+                            <button class="btn btn-sm btn-primary" onclick="addStock('sedang')">
+                                <i class="fas fa-plus"></i> Tambah
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="adjustStock('sedang')">
+                                <i class="fas fa-edit"></i> Sesuaikan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="inventory-card">
+                    <div class="inventory-header">
+                        <h3>Daun Pisang Kecil</h3>
+                        <span class="stock-status high">Stok Tinggi</span>
+                    </div>
+                    <div class="inventory-details">
+                        <div class="stock-info">
+                            <span class="stock-current">480</span>
+                            <span class="stock-unit">lembar</span>
+                        </div>
+                        <div class="stock-actions">
+                            <button class="btn btn-sm btn-primary" onclick="addStock('kecil')">
+                                <i class="fas fa-plus"></i> Tambah
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="adjustStock('kecil')">
+                                <i class="fas fa-edit"></i> Sesuaikan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Delivery Section -->
+        <section id="delivery-section" class="content-section">
+            <div class="section-header">
+                <h2>Manajemen Pengiriman</h2>
+                <button class="btn btn-primary" onclick="scheduleDelivery()">
+                    <i class="fas fa-truck"></i> Jadwalkan Pengiriman
+                </button>
+            </div>
+            
+            <div class="delivery-grid">
+                <div class="delivery-card">
+                    <div class="delivery-header">
+                        <h3>Pengiriman #001</h3>
+                        <span class="delivery-status on-route">Dalam Perjalanan</span>
+                    </div>
+                    <div class="delivery-details">
+                        <p><strong>Pelanggan:</strong> Sari Wulandari</p>
+                        <p><strong>Alamat:</strong> Jl. Pemuda No. 15, Semarang</p>
+                        <p><strong>Produk:</strong> 50 lembar Daun Pisang Besar</p>
+                        <p><strong>Estimasi:</strong> 30 menit</p>
+                        <div class="delivery-actions">
+                            <button class="btn btn-sm btn-success" onclick="completeDelivery('001')">
+                                <i class="fas fa-check"></i> Selesai
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="trackDelivery('001')">
+                                <i class="fas fa-map-marker-alt"></i> Lacak
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="delivery-card">
+                    <div class="delivery-header">
+                        <h3>Pengiriman #002</h3>
+                        <span class="delivery-status scheduled">Dijadwalkan</span>
+                    </div>
+                    <div class="delivery-details">
+                        <p><strong>Pelanggan:</strong> Budi Santoso</p>
+                        <p><strong>Alamat:</strong> Jl. Diponegoro No. 88, Semarang</p>
+                        <p><strong>Produk:</strong> 30 lembar Daun Pisang Sedang</p>
+                        <p><strong>Jadwal:</strong> 14:00 WIB</p>
+                        <div class="delivery-actions">
+                            <button class="btn btn-sm btn-primary" onclick="startDelivery('002')">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="editDelivery('002')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports-section" class="content-section">
+            <div class="section-header">
+                <h2>Laporan</h2>
+                <div class="date-range">
+                    <input type="date" id="startDate" value="2024-01-01">
+                    <span>sampai</span>
+                    <input type="date" id="endDate" value="2024-12-31">
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-chart-bar"></i> Generate
+                    </button>
+                </div>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Laporan Penjualan</h3>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Total Penjualan:</span>
+                            <span class="summary-value">Rp 45.250.000</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total Pesanan:</span>
+                            <span class="summary-value">1,250</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Rata-rata per Pesanan:</span>
+                            <span class="summary-value">Rp 36.200</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="downloadSalesReport()">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+                
+                <div class="report-card">
+                    <h3>Laporan Stok</h3>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Stok Masuk:</span>
+                            <span class="summary-value">5,200 lembar</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Stok Keluar:</span>
+                            <span class="summary-value">4,950 lembar</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Stok Tersisa:</span>
+                            <span class="summary-value">1,250 lembar</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="downloadStockReport()">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="content-section">
+            <div class="section-header">
+                <h2>Pengaturan</h2>
+            </div>
+            
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>Pengaturan Umum</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Nama Toko</label>
+                            <input type="text" value="Daun Pisang Segar">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Kontak</label>
+                            <input type="email" value="info@daunpisangsegar.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor WhatsApp</label>
+                            <input type="tel" value="+62 812-3456-7890">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat</label>
+                            <textarea rows="3">Jl. Raya Semarang No. 123, Semarang, Jawa Tengah</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>Pengaturan Pengiriman</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Minimal Pembelian Gratis Ongkir</label>
+                            <input type="number" value="50">
+                            <span class="form-help">lembar</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Biaya Pengiriman per KM</label>
+                            <input type="number" value="2000">
+                            <span class="form-help">Rupiah</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Radius Gratis Ongkir</label>
+                            <input type="number" value="10">
+                            <span class="form-help">KM dari pusat kota</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Produk Baru</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form class="modal-form">
+                <div class="form-group">
+                    <label>Nama Produk</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Harga per Lembar</label>
+                    <input type="number" required>
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi</label>
+                    <textarea rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Gambar Produk</label>
+                    <input type="file" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>Stok Awal</label>
+                    <input type="number" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addProductModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Tambah Produk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Stock Modal -->
+    <div id="addStockModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Stok</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form class="modal-form">
+                <div class="form-group">
+                    <label>Pilih Produk</label>
+                    <select required>
+                        <option value="">Pilih produk...</option>
+                        <option value="besar">Daun Pisang Besar</option>
+                        <option value="sedang">Daun Pisang Sedang</option>
+                        <option value="kecil">Daun Pisang Kecil</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Stok Ditambah</label>
+                    <input type="number" required min="1">
+                </div>
+                <div class="form-group">
+                    <label>Catatan</label>
+                    <textarea rows="2" placeholder="Catatan tambahan (opsional)"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addStockModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Tambah Stok</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

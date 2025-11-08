@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daun Pisang Segar - Bungkus Tradisional & Modern</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🍃 Daun Pisang Segar</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#products">Produk</a></li>
+                <li><a href="#about">Tentang Kami</a></li>
+                <li><a href="#cara-pesan">Cara Pesan</a></li>
+                <li><a href="#testimoni">Testimoni</a></li>
+                <li><a href="#contact">Kontak</a></li>
+                <li><a href="#cart" class="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1><span>Daun Pisang Segar</span> untuk Bungkus Tradisional & Modern</h1>
+                <p>Daun pisang berkualitas premium, segar, higienis, dan ramah lingkungan. Kami antar langsung ke lokasi Anda dengan layanan terpercaya!</p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn btn-primary"><i class="fas fa-leaf"></i> Lihat Produk</a>
+                    <a href="#products" class="btn btn-secondary"><i class="fas fa-shopping-cart"></i> Pesan Sekarang</a>
+                </div>
+                <div class="highlights">
+                    <div class="highlight-item">
+                        <i class="fas fa-leaf"></i>
+                        <span>Segar</span>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Higienis</span>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-recycle"></i>
+                        <span>Ramah Lingkungan</span>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Siap Kirim</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="aset/banner.jpg" alt="Daun Pisang Segar">
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Katalog Produk</h2>
+            <div class="products-grid">
+                <div class="product-card" data-product="besar">
+                    <img src="aset/1.jpg" alt="Daun Pisang Besar">
+                    <div class="product-info">
+                        <h3>Daun Pisang Besar</h3>
+                        <p class="price">Rp 1.000<span>/lembar</span></p>
+                        <p class="description">Ukuran: 40-50 cm, cocok untuk nasi gudeg, pepes ikan</p>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" onclick="changeQuantity('besar', -1)">-</button>
+                            <input type="number" id="qty-besar" value="1" min="1" onchange="updateQuantity('besar')">
+                            <button class="qty-btn plus" onclick="changeQuantity('besar', 1)">+</button>
+                        </div>
+                        <p class="subtotal">Subtotal: Rp <span id="subtotal-besar">1000</span></p>
+                        <button class="btn btn-primary add-to-cart" onclick="addToCart('besar')">Tambah ke Keranjang</button>
+                        <button class="btn btn-secondary" onclick="showProductDetail('besar')">Detail Produk</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-product="sedang">
+                    <img src="aset/2.jpg" alt="Daun Pisang Sedang">
+                    <div class="product-info">
+                        <h3>Daun Pisang Sedang</h3>
+                        <p class="price">Rp 700<span>/lembar</span></p>
+                        <p class="description">Ukuran: 30-40 cm, cocok untuk lontong, ketupat</p>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" onclick="changeQuantity('sedang', -1)">-</button>
+                            <input type="number" id="qty-sedang" value="1" min="1" onchange="updateQuantity('sedang')">
+                            <button class="qty-btn plus" onclick="changeQuantity('sedang', 1)">+</button>
+                        </div>
+                        <p class="subtotal">Subtotal: Rp <span id="subtotal-sedang">700</span></p>
+                        <button class="btn btn-primary add-to-cart" onclick="addToCart('sedang')">Tambah ke Keranjang</button>
+                        <button class="btn btn-secondary" onclick="showProductDetail('sedang')">Detail Produk</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-product="kecil">
+                    <img src="aset/3.jpg" alt="Daun Pisang Kecil">
+                    <div class="product-info">
+                        <h3>Daun Pisang Kecil</h3>
+                        <p class="price">Rp 500<span>/lembar</span></p>
+                        <p class="description">Ukuran: 20-30 cm, cocok untuk tempe, tahu bacem</p>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" onclick="changeQuantity('kecil', -1)">-</button>
+                            <input type="number" id="qty-kecil" value="1" min="1" onchange="updateQuantity('kecil')">
+                            <button class="qty-btn plus" onclick="changeQuantity('kecil', 1)">+</button>
+                        </div>
+                        <p class="subtotal">Subtotal: Rp <span id="subtotal-kecil">500</span></p>
+                        <button class="btn btn-primary add-to-cart" onclick="addToCart('kecil')">Tambah ke Keranjang</button>
+                        <button class="btn btn-secondary" onclick="showProductDetail('kecil')">Detail Produk</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Tentang Kami</h2>
+                    <p>Kami adalah penyedia daun pisang segar dari petani lokal Semarang yang telah berpengalaman lebih dari 10 tahun. Komitmen kami adalah menyediakan daun pisang berkualitas tinggi untuk mendukung kuliner tradisional Indonesia.</p>
+                    
+                    <div class="vision-mission">
+                        <div class="vision">
+                            <h3><i class="fas fa-eye"></i> Visi</h3>
+                            <p>Menjadi supplier daun pisang terpercaya yang mendukung pelestarian kuliner tradisional Indonesia dengan produk ramah lingkungan.</p>
+                        </div>
+                        <div class="mission">
+                            <h3><i class="fas fa-bullseye"></i> Misi</h3>
+                            <ul>
+                                <li>Menyediakan daun pisang segar dan berkualitas tinggi</li>
+                                <li>Mendukung petani lokal dengan kemitraan yang berkelanjutan</li>
+                                <li>Mempromosikan penggunaan bahan pembungkus ramah lingkungan</li>
+                                <li>Memberikan pelayanan terbaik kepada pelanggan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="aset/banner.jpg" alt="Petani Daun Pisang">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cara Pesan Section -->
+    <section id="cara-pesan" class="cara-pesan">
+        <div class="container">
+            <h2>Cara Pesan</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Pilih Produk</h3>
+                        <p>Pilih jenis dan ukuran daun pisang sesuai kebutuhan Anda</p>
+                    </div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Masukkan Jumlah</h3>
+                        <p>Tentukan jumlah lembar yang dibutuhkan</p>
+                    </div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Checkout</h3>
+                        <p>Isi data diri dan alamat pengiriman</p>
+                    </div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Pilih Pembayaran</h3>
+                        <p>Transfer bank atau e-wallet</p>
+                    </div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Konfirmasi</h3>
+                        <p>Konfirmasi pesanan dan pembayaran</p>
+                    </div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Tunggu Kiriman</h3>
+                        <p>Pesanan akan dikirim sesuai jadwal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimoni Section -->
+    <section id="testimoni" class="testimoni">
+        <div class="container">
+            <h2>Testimoni Pelanggan</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Customer">
+                        <div class="customer-info">
+                            <h4>Sari Wulandari</h4>
+                            <div class="rating">
+                                <span>★★★★★</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"Daun segar, sampai tepat waktu! Sangat cocok untuk usaha gudeg saya. Pelayanan ramah dan profesional."</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Customer">
+                        <div class="customer-info">
+                            <h4>Budi Santoso</h4>
+                            <div class="rating">
+                                <span>★★★★★</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"Kualitas daun pisang sangat bagus, tidak mudah robek. Harga juga bersaing. Recommended!"</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Customer">
+                        <div class="customer-info">
+                            <h4>Maya Indira</h4>
+                            <div class="rating">
+                                <span>★★★★☆</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"Pengiriman cepat dan packaging rapi. Daun pisang masih segar saat sampai. Terima kasih!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Kontak Kami</h2>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <h3>Kirim Pesan</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Nama Lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Isi Pesan" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h3>Hubungi Langsung</h3>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <p>+62 812-3456-7890</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@daunpisangsegar.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Alamat</h4>
+                            <p>Jl. Raya Semarang No. 123<br>Semarang, Jawa Tengah</p>
+                        </div>
+                    </div>
+                    <div class="social-media">
+                        <h4>Ikuti Kami</h4>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-tiktok"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🍃 Daun Pisang Segar</h3>
+                    <p>Penyedia daun pisang berkualitas tinggi untuk kebutuhan kuliner tradisional dan modern.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Menu</h4>
+                    <ul>
+                        <li><a href="#home">Beranda</a></li>
+                        <li><a href="#products">Produk</a></li>
+                        <li><a href="#about">Tentang Kami</a></li>
+                        <li><a href="#contact">Kontak</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Produk</h4>
+                    <ul>
+                        <li>Daun Pisang Besar</li>
+                        <li>Daun Pisang Sedang</li>
+                        <li>Daun Pisang Kecil</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontak</h4>
+                    <p><i class="fab fa-whatsapp"></i> +62 812-3456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@daunpisangsegar.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Daun Pisang Segar. All rights reserved.</p>
+                <a href="admin-login.html" class="admin-link">
+                    <i class="fas fa-user-shield"></i> Admin Panel
+                </a>
+            </div>
+            <style>
+                .admin-link {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 8px 15px;
+                    background-color: #4CAF50;
+                    color: white !important;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    margin-left: 1rem;
+                    transition: background-color 0.3s;
+                }
+                .admin-link:hover {
+                    background-color: #45a049;
+                }
+                .admin-link i {
+                    margin-right: 8px;
+                }
+            </style>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="productDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Keranjang Belanja</h2>
+            <div id="cartContent"></div>
+            <div class="cart-total">
+                <h3>Total: Rp <span id="cartTotal">0</span></h3>
+                <button class="btn btn-primary" onclick="showCheckout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Checkout</h2>
+            <form id="checkoutForm">
+                <div class="checkout-section">
+                    <h3>Data Pembeli</h3>
+                    <div class="form-group">
+                        <input type="text" id="buyerName" placeholder="Nama Lengkap" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="buyerPhone" placeholder="Nomor WhatsApp" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="buyerAddress" placeholder="Alamat Lengkap" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="checkout-section">
+                    <h3>Metode Pembayaran</h3>
+                    <div class="payment-options">
+                        <label><input type="radio" name="payment" value="transfer"> Transfer Bank</label>
+                        <label><input type="radio" name="payment" value="ovo"> OVO</label>
+                        <label><input type="radio" name="payment" value="dana"> DANA</label>
+                        <label><input type="radio" name="payment" value="gopay"> GoPay</label>
+                    </div>
+                </div>
+                
+                <div class="checkout-section">
+                    <h3>Metode Pengiriman</h3>
+                    <div class="shipping-options">
+                        <label><input type="radio" name="shipping" value="antar-langsung" checked> Antar Langsung (Gratis Ongkir Area Semarang)</label>
+                        <label><input type="radio" name="shipping" value="antar-luar-kota"> Antar ke Luar Kota (Biaya Sesuai Jarak)</label>
+                        <label><input type="radio" name="shipping" value="cod-semarang"> COD Area Semarang</label>
+                    </div>
+                    <div class="shipping-info" style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <p><i class="fas fa-info-circle" style="color: #2c5530;"></i> <strong>Layanan Antar Kami:</strong></p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>✓ Gratis ongkir untuk area Semarang (minimal pembelian 50 lembar)</li>
+                            <li>✓ Pengiriman langsung dari tim kami</li>
+                            <li>✓ Daun pisang dijamin segar saat sampai</li>
+                            <li>✓ Estimasi pengiriman 1-2 jam (area Semarang)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <h3>Ringkasan Pesanan</h3>
+                    <div id="orderSummary"></div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Konfirmasi Pesanan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
